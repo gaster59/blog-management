@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('admin/login', [LoginController::class, 'index'])->name('api.login.index');
 
 Route::get('category', [CategoryController::class, 'index'])->name('api.category.index');
+Route::post('category/add', [CategoryController::class, 'doAdd'])->name('api.category.doAdd');

@@ -20,7 +20,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * @return view
+     * @return json
      */
     public function index(Request $request)
     {
@@ -28,42 +28,32 @@ class CategoryController extends Controller
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
-        $categories = $this->category->with('childCategory')->where('parent_id', null)->simplePaginate(config('constants.paging_admin'));
+        $categories = $this->category->with('childCategory')->where('parent_id', null)->get();
         return response()->json([
             'status' => 1,
             'msg'    => 'success',
             'data'   => $categories,
         ]);
-        // dd($categories);
-        // return view('admin.category.index', [
-        //     'categories' => $categories,
-        // ]);
     }
 
     /**
-     * @return view
-     */
-    public function add()
-    {
-        $categories = $this->category->where('parent_id', null)->get();
-        return view('admin.category.add', [
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
-     * @param RequestCategory $request
-     *
-     * @return redirect
+     * @return json
      */
     public function doAdd(RequestCategory $request)
     {
+        $resultToken = $this->commonService->checkUserToken($request);
+        if (0 == $resultToken['status']) {
+            return $resultToken;
+        }
         $this->category->title     = $request->title;
         $this->category->slug      = Str::slug(stripVN($request->title), '-');
         $this->category->content   = $request->content;
         $this->category->parent_id = $request->parent_id;
         $this->category->save();
-        return redirect()->route('admin.category.index');
+        return response()->json([
+            'status' => 1,
+            'msg'    => 'success',
+        ]);
     }
 
     /**
