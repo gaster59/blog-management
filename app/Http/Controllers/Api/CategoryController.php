@@ -65,12 +65,16 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
         if (!$category) {
-            return redirect()->route('admin.category.index');
+            return response()->json([
+                'status' => 0,
+                'msg'    => 'Category does not exist',
+            ]);
         }
         $categories = $this->category->where('parent_id', null)->get();
-        return view('admin.category.edit', [
-            'category'   => $category,
-            'categories' => $categories,
+        return response()->json([
+            'status' => 1,
+            'msg'    => 'success',
+            'data'   => $category
         ]);
     }
 
@@ -83,14 +87,20 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
         if (!$category) {
-            return redirect()->route('admin.category.index');
+            return response()->json([
+                'status' => 0,
+                'msg'    => 'Category does not exist',
+            ]);
         }
         $category->title     = $request->title;
         $category->slug      = Str::slug(stripVN($request->title), '-');
         $category->content   = $request->content;
         $category->parent_id = $request->parent_id;
         $category->save();
-        return redirect()->route('admin.category.index');
+        return response()->json([
+            'status' => 1,
+            'msg'    => 'success',
+        ]);
     }
 
     /**

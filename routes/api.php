@@ -24,3 +24,5 @@ Route::post('admin/login', [LoginController::class, 'index'])->name('api.login.i
 
 Route::get('category', [CategoryController::class, 'index'])->name('api.category.index');
 Route::post('category/add', [CategoryController::class, 'doAdd'])->name('api.category.doAdd');
+Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('api.category.edit');
+Route::post('category/edit/{id}', [CategoryController::class, 'doEdit'])->name('api.category.doEdit');

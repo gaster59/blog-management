@@ -32,7 +32,7 @@ class LoginController extends Controller
             return redirect()->back()->withInput()->with('error', 'Login failed');
         }
         $user                 = Auth::guard('admin')->user();
-        $user->remember_token = hash('sha256', Str::random(60));
+        // $user->remember_token = hash('sha256', Str::random(60));
         $user->last_login     = date('Y-m-d H:i:s');
         $user->save();
         return redirect()->route('admin.dashboard.index');
