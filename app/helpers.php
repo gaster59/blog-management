@@ -1,9 +1,8 @@
 <?php
 
-
 /**
  * @param string $str
- * 
+ *
  * @return string
  */
 function stripVN($str)
@@ -29,7 +28,7 @@ function stripVN($str)
 /**
  * @param string $folder folder update in public
  * @param string name name's control in form
- * 
+ *
  * @return string
  */
 function uploadImage($request, $folder, $name)
@@ -52,4 +51,44 @@ function uploadImage($request, $folder, $name)
 
     $request->file($name)->move(public_path($folder), $fileName);
     return $fileName;
+}
+
+function __isBase64String($string)
+{
+    // Check if there is no invalid character in string
+    if (!preg_match('/^(?:[data]{4}:(text|image|application)\/[a-z]*)/', $string)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function saveProductImageBase64($base64String, $request, $folder)
+{
+    try {
+        if (!__isBase64String($base64String)) {
+            return '';
+        }
+        list($extension, $content) = explode(';', $base64String);
+        $tmpExtension              = 'jpg';
+        $fileName                  = 'post_' . time() . '.' . $tmpExtension;
+        $content                   = explode(',', $content)[1];
+
+        $storage = Storage::build([
+            'driver' => 'local',
+            'root'   => public_path($folder),
+        ]);
+        $pathImages = public_path($folder);
+        if (!file_exists($pathImages)) {
+            // create folder and file index.html
+            mkdir($pathImages);
+            $storage->put('index.html', 'deny all');
+        }
+        $storage->put($folder . '/' . $fileName, base64_decode($content));
+        $pathImage = public_path($folder . '/' . $fileName);
+        return $fileName;
+    } catch (Exception $ex) {
+        \Log::error($ex->getMessage());
+        return '';
+    }
 }

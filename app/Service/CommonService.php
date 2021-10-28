@@ -35,6 +35,7 @@ class CommonService
         $result = [
             'status' => 1,
             'msg'    => 'Success token',
+            'user' => $userObject
         ];
         return $result;
     }
