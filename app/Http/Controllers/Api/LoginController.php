@@ -39,6 +39,7 @@ class LoginController extends Controller
             'result' => [
                 'token' => $user->remember_token,
                 'email' => $user->email,
+                'name' => $user->name
             ],
         ]);
     }

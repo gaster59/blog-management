@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RequestPost;
-use App\Models\Post;
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use App\Service\CommonService;
 use Illuminate\Http\Request;
@@ -30,15 +29,23 @@ class PostController extends Controller
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
+        $limit     = 2;
+        $page      = $request->query('page', 1);
+        $offset    = ($page - 1) * $limit;
+        $totalData = $this->post->with('user')
+            ->whereHas('category', function ($q) {
+                $q->where('deleted_at', null);
+            })->count();
         $posts = $this->post->with('user')
             ->whereHas('category', function ($q) {
                 $q->where('deleted_at', null);
-            })
-            ->simplePaginate(config('constants.paging_admin'));
+            })->offset($offset)->limit($limit)->get();
         return response()->json([
-            'status' => 1,
-            'msg'    => 'success',
-            'data'   => $posts,
+            'status'    => 1,
+            'msg'       => 'success',
+            'data'      => $posts,
+            'page'      => $page,
+            'totalPage' => ceil($totalData / $limit),
         ]);
     }
 
@@ -66,7 +73,7 @@ class PostController extends Controller
             'avatar'    => $avatar,
             'author_id' => $authorId,
         ]);
-        $inserted->category()->attach($categoryId[0]);
+        $inserted->category()->attach($categoryId);
         return response()->json([
             'status' => 1,
             'msg'    => 'success',

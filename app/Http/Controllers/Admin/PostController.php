@@ -25,7 +25,6 @@ class PostController extends Controller
                 $q->where('deleted_at', null);
             })
             ->simplePaginate(config('constants.paging_admin'));
-
         return view('admin.post.index', [
             'posts' => $posts,
         ]);
