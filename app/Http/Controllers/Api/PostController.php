@@ -87,18 +87,24 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $category = $this->category->find($id);
-        if (!$category) {
+        $post = $this->post->find($id);
+        if (!$post) {
             return response()->json([
                 'status' => 0,
-                'msg'    => 'Category does not exist',
+                'msg'    => 'Post does not exist',
             ]);
         }
-        $categories = $this->category->where('parent_id', null)->get();
+        $postCategory = [];
+        foreach ($post->category as $item) {
+            $postCategory[] = $item->id;
+        }
         return response()->json([
             'status' => 1,
             'msg'    => 'success',
-            'data'   => $category,
+            'data'   => [
+                'post'         => $post,
+                'postCategory' => $postCategory,
+            ],
         ]);
     }
 
@@ -107,20 +113,44 @@ class PostController extends Controller
      *
      * @return redirect
      */
-    public function doEdit(RequestCategory $request, $id)
+    public function doEdit(Request $request, $id)
     {
-        $category = $this->category->find($id);
-        if (!$category) {
+        $resultToken = $this->commonService->checkUserToken($request);
+        if (0 == $resultToken['status']) {
+            return $resultToken;
+        }
+
+        $post = $this->post->find($id);
+        if (!$post) {
             return response()->json([
                 'status' => 0,
-                'msg'    => 'Category does not exist',
+                'msg'    => 'Post does not exist',
             ]);
         }
-        $category->title     = $request->title;
-        $category->slug      = Str::slug(stripVN($request->title), '-');
-        $category->content   = $request->content;
-        $category->parent_id = $request->parent_id;
-        $category->save();
+        $oldCategory = [];
+        foreach ($post->category as $item) {
+            $oldCategory[] = $item->id;
+        }
+
+        $title   = $request->input('title', '');
+        $slug    = Str::slug(stripVN($title), '-');
+        $summary = $request->input('summary', '');
+        $content = $request->input('content', '');
+        $avatar  = saveProductImageBase64($request->avatar, $request, $folder = 'post', $post->avatar);
+
+        $categoryId = $request->input('category_id');
+        $authorId   = $resultToken['user']->id;
+        $updated    = $post->update([
+            'title'     => $title,
+            'slug'      => $slug,
+            'summary'   => $summary,
+            'content'   => $content,
+            'avatar'    => $avatar,
+            'author_id' => $authorId,
+        ]);
+        $post->category()->detach($oldCategory);
+        $post->category()->attach($categoryId);
+
         return response()->json([
             'status' => 1,
             'msg'    => 'success',
@@ -128,36 +158,25 @@ class PostController extends Controller
     }
 
     /**
-     * @param integer $id
-     *
-     * return view
-     */
-    public function children($id)
-    {
-        $category = $this->category->find($id);
-        if (!$category) {
-            return redirect()->route('admin.category.index');
-        }
-        return view('admin.category.children', [
-            'category' => $category,
-        ]);
-    }
-
-    /**
      * @param integer id
      *
-     * @return redirect
+     * @return json
      */
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
-        $category = $this->category::find($id);
-        if (!$category) {
+        $resultToken = $this->commonService->checkUserToken($request);
+        if (0 == $resultToken['status']) {
+            return $resultToken;
+        }
+
+        $post = $this->post->find($id);
+        if (!$post) {
             return response()->json([
                 'status' => 0,
-                'msg'    => 'Category does not exist',
+                'msg'    => 'Post does not exist',
             ]);
         }
-        $category->delete();
+        $post->delete();
         return response()->json([
             'status' => 1,
             'msg'    => 'success',

@@ -63,11 +63,11 @@ function __isBase64String($string)
     }
 }
 
-function saveProductImageBase64($base64String, $request, $folder)
+function saveProductImageBase64($base64String, $request, $folder, $initAvatar = '')
 {
     try {
         if (!__isBase64String($base64String)) {
-            return '';
+            return $initAvatar;
         }
         list($extension, $content) = explode(';', $base64String);
         $tmpExtension              = 'jpg';
@@ -78,13 +78,12 @@ function saveProductImageBase64($base64String, $request, $folder)
             'driver' => 'local',
             'root'   => public_path($folder),
         ]);
-        $pathImages = public_path($folder);
+        $pathImages = public_path($folder . '/index.html');
         if (!file_exists($pathImages)) {
             // create folder and file index.html
-            mkdir($pathImages);
             $storage->put('index.html', 'deny all');
         }
-        $storage->put($folder . '/' . $fileName, base64_decode($content));
+        $storage->put($fileName, base64_decode($content));
         $pathImage = public_path($folder . '/' . $fileName);
         return $fileName;
     } catch (Exception $ex) {

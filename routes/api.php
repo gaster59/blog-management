@@ -31,3 +31,6 @@ Route::delete('category/delete/{id}', [CategoryController::class, 'delete'])->na
 
 Route::get('post', [PostController::class, 'index'])->name('api.post.index');
 Route::post('post/add', [PostController::class, 'doAdd'])->name('api.post.doAdd');
+Route::get('post/edit/{id}', [PostController::class, 'edit'])->name('api.post.edit');
+Route::post('post/edit/{id}', [PostController::class, 'doEdit'])->name('api.post.doEdit');
+Route::delete('post/delete/{id}', [PostController::class, 'delete'])->name('api.post.delete');
