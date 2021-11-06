@@ -7,12 +7,7 @@ use App\Models\User;
 class CommonService
 {
 
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
-    public function checkUserToken($request)
+    public function checkUserToken($request, $user)
     {
         $result    = [];
         $bearToken = $request->bearerToken();
@@ -23,8 +18,8 @@ class CommonService
             ];
             return $result;
         }
-        
-        $userObject = $this->user->where('remember_token', $bearToken)->first();
+
+        $userObject = $user->where('remember_token', $bearToken)->first();
         if (!$userObject) {
             $result = [
                 'status' => 0,
@@ -35,8 +30,13 @@ class CommonService
         $result = [
             'status' => 1,
             'msg'    => 'Success token',
-            'user' => $userObject
+            'user'   => $userObject,
         ];
         return $result;
+    }
+
+    public function sum($a, $b)
+    {
+        return $a + $b;
     }
 }

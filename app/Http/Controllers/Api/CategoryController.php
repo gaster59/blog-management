@@ -25,7 +25,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function doAdd(RequestCategory $request)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }

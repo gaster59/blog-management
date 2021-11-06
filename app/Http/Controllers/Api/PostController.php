@@ -25,7 +25,7 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
@@ -54,7 +54,7 @@ class PostController extends Controller
      */
     public function doAdd(Request $request)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
@@ -115,7 +115,7 @@ class PostController extends Controller
      */
     public function doEdit(Request $request, $id)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
@@ -164,7 +164,7 @@ class PostController extends Controller
      */
     public function delete(Request $request, $id)
     {
-        $resultToken = $this->commonService->checkUserToken($request);
+        $resultToken = $this->commonService->checkUserToken($request, $this->user);
         if (0 == $resultToken['status']) {
             return $resultToken;
         }
