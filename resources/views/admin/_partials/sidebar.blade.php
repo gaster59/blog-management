@@ -27,6 +27,18 @@
                 </a>
             </li>
 
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.genre.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Genre</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{{ route('admin.product.index') }}">
+                    <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Product</span>
+                </a>
+            </li>
+
             {{-- <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('admin.category.index') }}">
                     <i class="align-middle" data-feather="user"></i> <span class="align-middle">Category</span>

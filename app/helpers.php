@@ -31,12 +31,12 @@ function stripVN($str)
  *
  * @return string
  */
-function uploadImage($request, $folder, $name)
+function uploadImage($request, $folder, $name, $suffix = 'post_')
 {
     $originName = $request->file($name)->getClientOriginalName();
     $fileName   = pathinfo($originName, PATHINFO_FILENAME);
     $extension  = $request->file($name)->getClientOriginalExtension();
-    $fileName   = 'post_' . time() . '.' . $extension;
+    $fileName   = $suffix . time() . '.' . $extension;
 
     $pathImages = public_path($folder);
     if (!file_exists($pathImages)) {

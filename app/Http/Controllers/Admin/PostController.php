@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Events\WriteLogEvent;
 
 class PostController extends Controller
 {
@@ -17,9 +18,13 @@ class PostController extends Controller
         $this->category = $category;
     }
 
+    /**
+     * @return view
+     */
     public function index()
     {
         // $posts = $this->post->simplePaginate(config('constants.paging_admin'));
+        event(new WriteLogEvent());
         $posts = $this->post
             ->whereHas('category', function ($q) {
                 $q->where('deleted_at', null);
@@ -30,6 +35,9 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * @return view
+     */
     public function add()
     {
         $categories = $this->category->with('childCategory')->where('parent_id', null)->get();
@@ -38,6 +46,11 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * @param RequestPost $request
+     * 
+     * @return redirect
+     */
     public function doAdd(RequestPost $request)
     {
         $title      = $request->input('title', '');
@@ -59,6 +72,11 @@ class PostController extends Controller
         return redirect()->route('admin.post.add')->with('success', 'Insert success');
     }
 
+    /**
+     * @param interger $id
+     * 
+     * @return view
+     */
     public function edit($id)
     {
         $post = $this->post->find($id);
@@ -78,6 +96,12 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * @param RequestPost $request
+     * @param integer $id
+     * 
+     * @return redirect
+     */
     public function doEdit(RequestPost $request, $id)
     {
         $post        = $this->post->find($id);

@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\GenreController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CalendarController;
@@ -50,6 +52,20 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
     Route::get('post/edit/{id}', [PostController::class, 'edit'])->name('admin.post.edit');
     Route::post('post/edit/{id}', [PostController::class, 'doEdit'])->name('admin.post.doEdit');
     Route::get('post/delete/{id}', [PostController::class, 'delete'])->name('admin.post.delete');
+
+    Route::get('genre', [GenreController::class, 'index'])->name('admin.genre.index');
+    Route::get('genre/add', [GenreController::class, 'add'])->name('admin.genre.add');
+    Route::post('genre/add', [GenreController::class, 'doAdd'])->name('admin.genre.doAdd');
+    Route::get('genre/edit/{id}', [GenreController::class, 'edit'])->name('admin.genre.edit');
+    Route::post('genre/edit/{id}', [GenreController::class, 'doEdit'])->name('admin.genre.doEdit');
+    Route::get('genre/delete/{id}', [GenreController::class, 'delete'])->name('admin.genre.delete');
+
+    Route::get('product', [ProductController::class, 'index'])->name('admin.product.index');
+    Route::get('product/add', [ProductController::class, 'add'])->name('admin.product.add');
+    Route::post('product/add', [ProductController::class, 'doAdd'])->name('admin.product.doAdd');
+    Route::get('product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+    Route::post('product/edit/{id}', [ProductController::class, 'doEdit'])->name('admin.product.doEdit');
+    Route::get('product/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('admin.home.index');
