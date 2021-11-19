@@ -15,7 +15,8 @@
                             <span class="card-title mb-0">List Posts</span>
                         </div>
                         <div class="col-6 d-flex flex-row-reverse bd-highlight">
-                            <a class="btn btn-success" href="{{ route('admin.post.add') }}">Add post</a>    
+                            <a class="btn btn-success" href="{{ route('admin.get.download') }}">Download</a>
+                            <a class="me-1 btn btn-success" href="{{ route('admin.post.add') }}">Add post</a>
                         </div>
                     </div>
                 </div>

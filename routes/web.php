@@ -52,6 +52,7 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
     Route::get('post/edit/{id}', [PostController::class, 'edit'])->name('admin.post.edit');
     Route::post('post/edit/{id}', [PostController::class, 'doEdit'])->name('admin.post.doEdit');
     Route::get('post/delete/{id}', [PostController::class, 'delete'])->name('admin.post.delete');
+    Route::get('post/download', [PostController::class, 'download'])->name('admin.get.download');
 
     Route::get('genre', [GenreController::class, 'index'])->name('admin.genre.index');
     Route::get('genre/add', [GenreController::class, 'add'])->name('admin.genre.add');

@@ -9,6 +9,8 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Events\WriteLogEvent;
+use App\Exports\UserExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PostController extends Controller
 {
@@ -131,5 +133,10 @@ class PostController extends Controller
         $post->category()->detach($oldCategory);
         $post->category()->attach($categoryId);
         return redirect()->route('admin.post.index');
+    }
+
+    public function download()
+    {
+        return Excel::download(new UserExport, 'user.xlsx');
     }
 }
