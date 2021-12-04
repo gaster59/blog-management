@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,5 +73,10 @@ Route::prefix('admin')->middleware('auth.admin')->group(function () {
 Route::get('/', [HomeController::class, 'index'])->name('admin.home.index');
 Route::get('/post/{id}-{slug}', [HomeController::class, 'detailPost'])->name('admin.detail-post.index');
 Route::get('/about', [HomeController::class, 'about'])->name('admin.about.index');
+
 Route::get('/calendar', [CalendarController::class, 'index'])->name('front.calendar.index');
 
+Route::get('/stripe', [StripeController::class, 'index'])->name('front.stripe.index');
+Route::get('/checkout', [StripeController::class, 'checkout'])->name('front.stripe.checkout');
+Route::get('/checkout/success', [StripeController::class, 'checkoutSuccess'])->name('front.stripe.checkoutSuccess');
+Route::get('/checkout/fail', [StripeController::class, 'checkoutFail'])->name('front.stripe.checkoutFail');

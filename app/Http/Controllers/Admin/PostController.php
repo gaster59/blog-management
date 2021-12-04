@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Events\WriteLogEvent;
 use App\Exports\UserExport;
+use App\Exports\UserCsvExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PostController extends Controller
@@ -137,6 +138,7 @@ class PostController extends Controller
 
     public function download()
     {
-        return Excel::download(new UserExport, 'user.xlsx');
+        // return Excel::download(new UserExport, 'user.xlsx');
+        return Excel::download(new UserCsvExport($id = 1), 'user.csv');
     }
 }
